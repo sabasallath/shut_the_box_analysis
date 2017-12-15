@@ -1,4 +1,4 @@
-*.class
+/*.class
 
 # Log file
 *.log
@@ -21,4 +21,9 @@
 *.iml
 output/
 
+
+/target/
+/.classpath
+/.project
+/.gitignore
 
