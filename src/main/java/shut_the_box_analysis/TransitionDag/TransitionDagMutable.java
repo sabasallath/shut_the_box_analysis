@@ -1,7 +1,9 @@
-package shut_the_box_analysis;
+package shut_the_box_analysis.TransitionDag;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import shut_the_box_analysis.Decomposition;
 import shut_the_box_analysis.box.Box;
 import shut_the_box_analysis.dice.Dice;
 import shut_the_box_analysis.dice.DiceProbability;
@@ -9,34 +11,30 @@ import shut_the_box_analysis.states.State;
 
 import java.util.*;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
-public class ShutTheBox {
+public class TransitionDagMutable {
 
     private final Decomposition decomposition;
+    private final HashMap<Integer, State> transitionTreeMutable;
     private final State root;
     private final State leaf;
-    private HashMap<Integer, State> transitionTree;
 
-    public ShutTheBox() {
-
-        this.transitionTree = Maps.newHashMap();
-        this.decomposition = new Decomposition();
-
+    TransitionDagMutable() {
         root = new State(Sets.newTreeSet(Box.irange()));
         leaf = new State(Sets.newTreeSet());
-        createTransitionTree();
+        this.transitionTreeMutable = Maps.newHashMap();
+        this.decomposition = new Decomposition();
+        createTransitionDag();
         assignCost();
-//        simulate();
     }
 
     /* -------------------------------------------------------
         Create transition Tree
      -------------------------------------------------------*/
 
-    private void createTransitionTree() {
-        transitionTree.put(root.hashCode(), root);
-        transitionTree.put(leaf.hashCode(), leaf);
+    private void createTransitionDag() {
+        transitionTreeMutable.put(root.hashCode(), root);
+        transitionTreeMutable.put(leaf.hashCode(), leaf);
         addChanceNode(root);
     }
 
@@ -54,10 +52,10 @@ public class ShutTheBox {
     }
 
     private void link(State current, State nextState, Consumer<State> f) {
-        if (transitionTree.containsKey(nextState.hashCode())) {
-            nextState = transitionTree.get(nextState.hashCode());
+        if (transitionTreeMutable.containsKey(nextState.hashCode())) {
+            nextState = transitionTreeMutable.get(nextState.hashCode());
         } else {
-            transitionTree.put(nextState.hashCode(), nextState);
+            transitionTreeMutable.put(nextState.hashCode(), nextState);
             f.accept(nextState);
         }
 
@@ -99,46 +97,7 @@ public class ShutTheBox {
         }
     }
 
-
-    /* -------------------------------------------------------
-        Simulate
-     -------------------------------------------------------*/
-
-    public boolean simulate(boolean print) {
-        StringJoiner sb = new StringJoiner("\n", "\n", "\n");
-        if (print) sb.add(root.stateAndCost());
-
-        State current = transitionTree.get(root.hashCode());
-
-        while (current != null) {
-
-            if (print) simulatePrinter(sb, current);
-
-            if (current.dice() == 0) {
-                if (current == leaf) break;
-                int roll = Dice.roll();
-                if (print) sb.add("Dice = " + roll);
-                current = transitionTree.get(new State(current.getState(), roll).hashCode());
-            } else {
-                current = current.getMinNext();
-            }
-        }
-
-        if (print) System.out.println(sb.toString());
-
-        return current == leaf;
-    }
-
-    private void simulatePrinter(StringJoiner sb, State current) {
-        sb.add("------------------")
-                .add("Current :" + current.stateAndCost())
-                .add("Next List :")
-                .add(current.getNext().stream()
-                .map(State::stateAndCost)
-                .collect(Collectors.joining("\n")));
-    }
-
-    public HashMap<Integer, State> getTransitionTree() {
-        return transitionTree;
+    public ImmutableMap<Integer, State> getMap() {
+        return ImmutableMap.copyOf(transitionTreeMutable);
     }
 }

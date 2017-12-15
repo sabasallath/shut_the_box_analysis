@@ -27,17 +27,17 @@ public class DecompositionTest {
 //    }
 //
 
-    @Test
-    public void getValidtest() {
-        TreeSet<Integer> state = Sets.newTreeSet();
-        state.add(1);
-        State root = new State(Sets.newTreeSet(state), 3);
-        ImmutableList<State> valid = d.getValid(root);
-
-        LinkedList<Integer> l = Lists.newLinkedList();
-        l.add(1);
-        l.add(3);
-
-        assertEquals(new State(Sets.newTreeSet(l)), valid.get(0));
-    }
+//    @Test
+//    public void getValidtest() {
+//        TreeSet<Integer> state = Sets.newTreeSet();
+//        state.add(1);
+//        State root = new State(Sets.newTreeSet(state), 3);
+//        ImmutableList<State> valid = d.getValid(root);
+//
+//        LinkedList<Integer> l = Lists.newLinkedList();
+//        l.add(1);
+//        l.add(3);
+//
+//        assertEquals(new State(Sets.newTreeSet(l)), valid.get(0));
+//    }
 }

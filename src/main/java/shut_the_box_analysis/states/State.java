@@ -2,6 +2,7 @@ package shut_the_box_analysis.states;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.Sets;
+import shut_the_box_analysis.box.Box;
 
 import java.util.LinkedList;
 import java.util.List;
