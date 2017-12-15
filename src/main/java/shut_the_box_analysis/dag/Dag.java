@@ -1,29 +1,33 @@
-package shut_the_box_analysis.TransitionDag;
+package shut_the_box_analysis.dag;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import shut_the_box_analysis.Decomposition;
 import shut_the_box_analysis.box.Box;
+import shut_the_box_analysis.dag.states.CostType;
+import shut_the_box_analysis.dag.states.StateFactory;
 import shut_the_box_analysis.dice.Dice;
 import shut_the_box_analysis.dice.DiceProbability;
-import shut_the_box_analysis.states.State;
+import shut_the_box_analysis.dag.states.State;
 
 import java.util.*;
 import java.util.function.Consumer;
 
-public class TransitionDagMutable {
+public class Dag {
 
     private final Decomposition decomposition;
     private final HashMap<Integer, State> transitionTreeMutable;
     private final State root;
     private final State leaf;
+    private final StateFactory factory;
 
-    TransitionDagMutable() {
-        root = new State(Sets.newTreeSet(Box.irange()));
-        leaf = new State(Sets.newTreeSet());
+    public Dag(CostType costType) {
+        this.factory = new StateFactory(costType);
+        root = factory.state(Sets.newTreeSet(Box.irange()));
+        leaf = factory.state(Sets.newTreeSet());
         this.transitionTreeMutable = Maps.newHashMap();
-        this.decomposition = new Decomposition();
+        this.decomposition = new Decomposition(factory);
         createTransitionDag();
         assignCost();
     }
@@ -40,7 +44,7 @@ public class TransitionDagMutable {
 
     private void addChanceNode(State current) {
         for (Integer i : Dice.irange()) {
-            State nextState = new State(current, i);
+            State nextState = factory.state(current, i);
             link(current, nextState, this::addDecisionNode);
         }
     }
@@ -99,5 +103,21 @@ public class TransitionDagMutable {
 
     public ImmutableMap<Integer, State> getMap() {
         return ImmutableMap.copyOf(transitionTreeMutable);
+    }
+
+    public State getRoot() {
+        return root;
+    }
+
+    public State getLeaf() {
+        return leaf;
+    }
+
+    public State get(int hashcode) {
+        return transitionTreeMutable.get(hashcode);
+    }
+
+    public StateFactory getFactory() {
+        return factory;
     }
 }

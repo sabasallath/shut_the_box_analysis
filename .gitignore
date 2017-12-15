@@ -19,5 +19,6 @@
 
 .idea/
 *.iml
+output/
 
 

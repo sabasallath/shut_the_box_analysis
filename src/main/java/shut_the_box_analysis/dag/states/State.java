@@ -1,23 +1,22 @@
-package shut_the_box_analysis.states;
+package shut_the_box_analysis.dag.states;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.Sets;
-import shut_the_box_analysis.box.Box;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.TreeSet;
 
-public class State {
+public abstract class State {
 
     private final int dice;
     private double cost;
-    private TreeSet<Integer> state;
+    TreeSet<Integer> state;
     private List<State> next;
     private List<State> previous;
     private State minNext;
 
-    public State(TreeSet<Integer> state, int dice) {
+    State(TreeSet<Integer> state, int dice) {
         this.state = state;
         this.dice = dice;
         this.next = new LinkedList<>();
@@ -25,17 +24,20 @@ public class State {
         this.cost = setScore();
     }
 
-    public State(TreeSet<Integer> state) {
+    State(TreeSet<Integer> state) {
         this.state = state;
         this.dice = 0;
         this.next = new LinkedList<>();
         this.previous = new LinkedList<>();
         this.cost = setScore();
+
     }
 
-    public State(State chanceState, Integer dice) {
+    State(State chanceState, Integer dice) {
         this(Sets.newTreeSet(chanceState.getState()), dice);
     }
+
+    abstract double setScore();
 
     public TreeSet<Integer> getState() {
         return state;
@@ -61,19 +63,24 @@ public class State {
         return previous;
     }
 
-    private double setScore() {
-        StringBuilder sb = new StringBuilder();
-	    state.forEach(sb::append);
-        String s = sb.toString();
-        return s.equals("") ? 0.0 : Double.parseDouble(s);
+    public void setCost(double cost) {
+        this.cost = cost;
     }
 
-    public double getCost() {
+    public double getCost (){
         return cost;
     }
 
-    public void setCost(double cost) {
-        this.cost = cost;
+    public void setMinNext(State next) {
+        this.minNext = next;
+    }
+
+    public State getMinNext() {
+        return minNext;
+    }
+
+    public String stateAndCost() {
+        return toString() + ", c = " + String.format("%.2f", cost);
     }
 
     @Override
@@ -90,20 +97,10 @@ public class State {
         return Objects.hashCode(this.toString());
     }
 
-    public void setMinNext(State next) {
-        this.minNext = next;
-    }
-
-    public State getMinNext() {
-        return minNext;
-    }
 
     @Override
     public String toString() {
         return state.toString() + "_" + dice();
     }
 
-    public String stateAndCost() {
-        return toString() + ", cost = " + String.format("%.2f", cost);
-    }
 }

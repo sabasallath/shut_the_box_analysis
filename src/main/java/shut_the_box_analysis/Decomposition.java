@@ -2,8 +2,9 @@ package shut_the_box_analysis;
 
 import com.google.common.collect.*;
 import shut_the_box_analysis.box.Box;
+import shut_the_box_analysis.dag.states.StateFactory;
 import shut_the_box_analysis.dice.Dice;
-import shut_the_box_analysis.states.State;
+import shut_the_box_analysis.dag.states.State;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -14,9 +15,11 @@ import java.util.stream.IntStream;
 
 public class Decomposition {
 
+    private final StateFactory stateFactory;
     private ImmutableListMultimap<Integer, Set<Integer>> imap;
 
-    public Decomposition() {
+    public Decomposition(StateFactory stateFactory) {
+        this.stateFactory = stateFactory;
 
         List<IntStream> lIntStream = Sets.powerSet(Sets.newHashSet(Box.irange()))
                 .stream()
@@ -49,7 +52,7 @@ public class Decomposition {
             if (isValidDecomposition(currentState, decomposition)) {
                 TreeSet<Integer> decompSet = Sets.newTreeSet(currentState);
                 decompSet.removeAll(decomposition);
-                res.add(new State(decompSet));
+                res.add(stateFactory.state(decompSet));
             }
         }
 

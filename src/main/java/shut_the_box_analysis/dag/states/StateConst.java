@@ -1,4 +1,4 @@
-package shut_the_box_analysis.states;
+package shut_the_box_analysis.dag.states;
 
 public enum StateConst {
     CHANCE_STATE_SIZE(9),
