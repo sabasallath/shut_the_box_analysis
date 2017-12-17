@@ -21,3 +21,7 @@
 *.iml
 output/
 ploting/env/
+
+/target/
+/.classpath
+/.project
