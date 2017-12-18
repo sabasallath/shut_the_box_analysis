@@ -1,6 +1,7 @@
 package shut_the_box_analysis;
 
 import org.junit.Test;
+import shut_the_box_analysis.dag.StrategyType;
 import shut_the_box_analysis.dag.states.CostType;
 import shut_the_box_analysis.dag.Dag;
 
@@ -13,7 +14,7 @@ public class ShutTheBoxTest {
 
     @Test
     public void createTransitionTreetest() {
-        Dag dag = new Dag(CostType.CONCAT);
+        Dag dag = new Dag(CostType.CONCAT, StrategyType.OPTIMAL);
         assertEquals(0.0, dag.getLeaf().getCost(), delta);
         assertEquals(14764.3168, dag.getRoot().getCost(), delta);
     }

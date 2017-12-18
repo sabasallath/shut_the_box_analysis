@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # coding: utf-8
+import re
 
 import os
 import pandas as pd
@@ -18,18 +19,17 @@ os.chdir(dname)
 # ------------------------------------------------
 root_foldername = "../../output/"
 foldername = "shut_the_box_analysis.AnalysisWinningDepth/"
-filenames1 = ["sumByLevel_concat",
-              "sumByLevel_sum"]
-filenames2 = ["winningLeafByLevel_concat",
-              "winningLeafByLevel_sum"]
-
+filenames1 = [f for f in os.listdir(root_foldername + foldername)
+              if f.startswith("sumByLevel") and f.endswith(".csv")]
+filenames2 = [f for f in os.listdir(root_foldername + foldername)
+              if f.startswith("winningLeafByLevel") and f.endswith(".csv")]
 
 # ------------------------------------------------
 # Plot function
 # ------------------------------------------------
 def plot(filename, y1, y2):
-    input_file = root_foldername + foldername + filename + ".csv"
-    output_file = root_foldername + foldername + filename
+    input_file = root_foldername + foldername + filename
+    output_file = input_file[:-4]
 
     sns.set(style="whitegrid", context="paper")
 

@@ -2,6 +2,7 @@ package shut_the_box_analysis.io;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
+import shut_the_box_analysis.dag.StrategyType;
 import shut_the_box_analysis.dag.states.CostType;
 
 import java.io.File;
@@ -18,9 +19,11 @@ public class Csv {
     private final CostType costType;
     private CSVPrinter csvPrinter;
     private final String baseOutputFolder = "output/";
+    private StrategyType strategy;
 
-    public Csv(String subFolder, String filename, CostType costType) {
+    public Csv(String subFolder, String filename, CostType costType, StrategyType strategy) {
         this.costType = costType;
+        this.strategy = strategy;
         createFolder(baseOutputFolder);
         String folderName = createFolder(formatFolder(subFolder));
         Path outPath = Paths.get(formatFilename(folderName, filename));
@@ -34,7 +37,7 @@ public class Csv {
     private String createFolder(String folderName) {
         File folder = new File(folderName);
         if (! folder.exists()) {
-            if (! folder.mkdir()) throw new RuntimeException("Unable to create folder " + folder);;
+            if (! folder.mkdir()) throw new RuntimeException("Unable to create folder " + folder);
         }
         return folderName;
     }
@@ -48,7 +51,7 @@ public class Csv {
     }
 
     private String formatFilename(String folder, String filename) {
-        return folder + filename + "_" + costType.toString() + ".csv";
+        return folder + filename + "_" + costType.toString() + "_" + strategy.toString() + ".csv";
     }
 
     public void add(Object... values) {

@@ -21,16 +21,19 @@ public class Dag {
     private final State root;
     private final State leaf;
     private final StateFactory factory;
+    private StrategyType strategy;
 
-    public Dag(CostType costType) {
+    public Dag(CostType costType, StrategyType strategy) {
         this.factory = new StateFactory(costType);
-        root = factory.state(Sets.newTreeSet(Box.irange()));
-        leaf = factory.state(Sets.newTreeSet());
+        this.strategy = strategy;
+        this.root = factory.state(Sets.newTreeSet(Box.irange()));
+        this.leaf = factory.state(Sets.newTreeSet());
         this.transitionTreeMutable = Maps.newHashMap();
         this.decomposition = new Decomposition(factory);
         createTransitionDag();
         assignCost();
     }
+
 
     /* -------------------------------------------------------
         Create transition Tree
@@ -84,11 +87,9 @@ public class Dag {
                         .sum();
                 current.setCost(sum);
             } else {
-                State min = current.getNext().stream()
-                        .min(Comparator.comparingDouble(State::getCost))
-                        .orElseThrow(() -> new RuntimeException("No next - should never happen."));
-                current.setCost(min.getCost());
-                current.setMinNext(min);
+                State next = strategy.get().apply(current);
+                current.setCost(next.getCost());
+                current.setStrategyNext(next);
             }
         }
     }
@@ -119,5 +120,9 @@ public class Dag {
 
     public StateFactory getFactory() {
         return factory;
+    }
+
+    public StrategyType getStrategy() {
+        return strategy;
     }
 }

@@ -14,7 +14,7 @@ public abstract class State {
     TreeSet<Integer> state;
     private List<State> next;
     private List<State> previous;
-    private State minNext;
+    private State strategyNext;
 
     State(TreeSet<Integer> state, int dice) {
         this.state = state;
@@ -71,12 +71,12 @@ public abstract class State {
         return cost;
     }
 
-    public void setMinNext(State next) {
-        this.minNext = next;
+    public void setStrategyNext(State next) {
+        this.strategyNext = next;
     }
 
-    public State getMinNext() {
-        return minNext;
+    public State getStrategyNext() {
+        return strategyNext;
     }
 
     public String stateAndCost() {

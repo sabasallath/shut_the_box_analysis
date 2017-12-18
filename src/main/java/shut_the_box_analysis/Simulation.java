@@ -31,7 +31,7 @@ public class Simulation {
                 if (print) sb.add("Dice = " + roll);
                 current = dag.get(dag.getFactory().state(current.getState(), roll).hashCode());
             } else {
-                current = current.getMinNext();
+                current = current.getStrategyNext();
             }
         }
 
