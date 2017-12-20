@@ -2,7 +2,8 @@ package shut_the_box_analysis.dag.states;
 
 public enum CostType {
     SUM("sum"),
-    CONCAT("concat");
+    CONCAT("concat"),
+    WIN_LOOSE("win_loose");
 
     private final String s;
 

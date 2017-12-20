@@ -1,4 +1,4 @@
-package shut_the_box_analysis;
+package shut_the_box_analysis.simulation;
 
 import shut_the_box_analysis.dag.Dag;
 import shut_the_box_analysis.dice.Dice;

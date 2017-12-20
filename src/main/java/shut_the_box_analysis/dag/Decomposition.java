@@ -1,4 +1,4 @@
-package shut_the_box_analysis;
+package shut_the_box_analysis.dag;
 
 import com.google.common.collect.*;
 import shut_the_box_analysis.box.Box;

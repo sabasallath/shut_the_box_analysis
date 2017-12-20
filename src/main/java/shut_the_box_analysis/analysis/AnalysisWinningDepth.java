@@ -1,4 +1,4 @@
-package shut_the_box_analysis;
+package shut_the_box_analysis.analysis;
 
 import com.google.common.collect.Multimap;
 import com.google.common.collect.MultimapBuilder;

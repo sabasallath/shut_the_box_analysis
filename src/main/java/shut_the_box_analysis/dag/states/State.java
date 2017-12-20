@@ -83,6 +83,14 @@ public abstract class State {
         return toString() + ", c = " + String.format("%.2f", cost);
     }
 
+    boolean isRoot() {
+        return this.getState().size() == StateConst.CHANCE_STATE_SIZE.get();
+    }
+
+    boolean isLeaf() {
+        return this.getState().size() == 0;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -3,7 +3,6 @@ package shut_the_box_analysis.dag;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import shut_the_box_analysis.Decomposition;
 import shut_the_box_analysis.box.Box;
 import shut_the_box_analysis.dag.states.CostType;
 import shut_the_box_analysis.dag.states.StateFactory;
@@ -76,7 +75,7 @@ public class Dag {
 
     private void assignCost() {
         ArrayDeque<State> todoState = new ArrayDeque<>();
-        todoState.add(leaf);
+        todoState.addAll(leaf.getPrevious());
 
         while (!todoState.isEmpty()) {
             State current = todoState.pollFirst();
@@ -100,10 +99,6 @@ public class Dag {
                 todo.add(previous);
             }
         }
-    }
-
-    public ImmutableMap<Integer, State> getMap() {
-        return ImmutableMap.copyOf(transitionTreeMutable);
     }
 
     public State getRoot() {

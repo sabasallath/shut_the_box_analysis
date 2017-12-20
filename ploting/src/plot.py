@@ -18,7 +18,7 @@ os.chdir(dname)
 # File Location
 # ------------------------------------------------
 root_foldername = "../../output/"
-foldername = "shut_the_box_analysis.AnalysisWinningDepth/"
+foldername = "shut_the_box_analysis.analysis.AnalysisWinningDepth/"
 filenames1 = [f for f in os.listdir(root_foldername + foldername)
               if f.startswith("sumByLevel") and f.endswith(".csv")]
 filenames2 = [f for f in os.listdir(root_foldername + foldername)

@@ -5,14 +5,10 @@ import shut_the_box_analysis.dag.states.State;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Function;
-import java.util.function.Supplier;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
 public enum StrategyType {
-    OPTIMAL("optimal"),
+    MIN("min"),
     MAX("max"),
     RANDOM("random");
 
@@ -29,7 +25,7 @@ public enum StrategyType {
 
     public Function<State, State> get() {
         switch (this) {
-            case OPTIMAL:
+            case MIN:
                 return state -> state.getNext().stream()
                         .min(Comparator.comparingDouble(State::getCost))
                         .orElseThrow(() -> new RuntimeException("No next - should never happen."));

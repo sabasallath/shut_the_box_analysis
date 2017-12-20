@@ -14,7 +14,7 @@ public class ShutTheBoxTest {
 
     @Test
     public void createTransitionTreetest() {
-        Dag dag = new Dag(CostType.CONCAT, StrategyType.OPTIMAL);
+        Dag dag = new Dag(CostType.CONCAT, StrategyType.MIN);
         assertEquals(0.0, dag.getLeaf().getCost(), delta);
         assertEquals(14764.3168, dag.getRoot().getCost(), delta);
     }

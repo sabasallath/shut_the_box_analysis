@@ -18,6 +18,8 @@ public class StateFactory {
                 return new StateSum(state, dice);
             case CONCAT:
                 return new StateConcat(state, dice);
+            case WIN_LOOSE:
+                return new StateWinLoose(state, dice);
             default:
                 throw new RuntimeException("No more costType");
         }
@@ -29,6 +31,8 @@ public class StateFactory {
                 return new StateSum(state);
             case CONCAT:
                 return new StateConcat(state);
+            case WIN_LOOSE:
+                return new StateWinLoose(state);
             default:
                 throw new RuntimeException("No more costType");
         }
@@ -40,6 +44,8 @@ public class StateFactory {
                 return new StateSum(Sets.newTreeSet(chanceState.getState()), dice);
             case CONCAT:
                 return new StateConcat(Sets.newTreeSet(chanceState.getState()), dice);
+            case WIN_LOOSE:
+                return new StateWinLoose(Sets.newTreeSet(chanceState.getState()), dice);
             default:
                 throw new RuntimeException("No more costType");
         }

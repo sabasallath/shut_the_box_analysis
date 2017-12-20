@@ -3,6 +3,7 @@ package shut_the_box_analysis;
 import shut_the_box_analysis.dag.StrategyType;
 import shut_the_box_analysis.dag.states.CostType;
 import shut_the_box_analysis.dag.Dag;
+import shut_the_box_analysis.simulation.Simulation;
 
 public class Simulate {
 
@@ -14,6 +15,10 @@ public class Simulate {
                 simulate(costType, strategy);
             }
         }
+//        simulate(CostType.WIN_LOOSE, StrategyType.MAX);
+//        simulate(CostType.WIN_LOOSE, StrategyType.MIN);
+//        simulate(CostType.WIN_LOOSE, StrategyType.RANDOM);
+//        simulate(CostType.SUM, StrategyType.MIN);
     }
 
     private static void simulate(CostType concat, StrategyType strategy) {
@@ -21,11 +26,13 @@ public class Simulate {
                 "New Simulation with " + NB_GAME + " game\n" +
                 "Strategy = " + strategy.toString() + "\n" +
                 "Rule for cost = " + concat.toString());
-        Simulation simulation = new Simulation(new Dag(concat, strategy));
+        Dag dag = new Dag(concat, strategy);
+        Simulation simulation = new Simulation(dag);
 
         int winningCount = 0;
         for (int i = 0; i < NB_GAME; i++) {
-            if (simulation.run(false)) winningCount ++;
+            boolean win = simulation.run(false);
+            if (win) winningCount ++;
         }
         System.out.println("Winning Games : " + winningCount + "/" + NB_GAME);
         double ratio = ((double) winningCount / (double) NB_GAME) * 100;
