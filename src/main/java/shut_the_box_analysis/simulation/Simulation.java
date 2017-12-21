@@ -15,14 +15,14 @@ public class Simulation {
         this.dag = dag;
     }
 
-    public boolean run(boolean print) {
+    public State run(boolean print) {
         StringJoiner sb = new StringJoiner("\n", "\n", "\n");
         if (print) sb.add(dag.getRoot().stateAndCost());
 
         State current = dag.getRoot();
-
+        State previous = current;
         while (current != null) {
-
+        	previous = current;
             if (print) simulatePrinter(sb, current);
 
             if (current.dice() == 0) {
@@ -37,7 +37,7 @@ public class Simulation {
 
         if (print) System.out.println(sb.toString());
 
-        return current == dag.getLeaf();
+        return previous;
     }
 
     private void simulatePrinter(StringJoiner sb, State current) {
