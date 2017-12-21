@@ -17,4 +17,6 @@ if [ ! -d "ploting/env" ]; then
     ploting/setenv.sh
 fi
 source ploting/env/bin/activate
+
 ploting/src/plot.py
+ploting/src/plotDistribution.py

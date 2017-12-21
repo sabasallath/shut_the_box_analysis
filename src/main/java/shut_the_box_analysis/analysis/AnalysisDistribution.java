@@ -7,6 +7,7 @@ import shut_the_box_analysis.dag.StrategyType;
 import shut_the_box_analysis.dag.states.CostType;
 import shut_the_box_analysis.dag.states.State;
 import shut_the_box_analysis.dice.DiceProbability;
+import shut_the_box_analysis.io.Csv;
 
 public class AnalysisDistribution {
 
@@ -16,38 +17,54 @@ public class AnalysisDistribution {
     private HashMap<Integer, Double> statesByCost;
     private HashMap<State, Integer> visitedCounter;
     private HashMap<State, Double> statesProbatility;
-    private double totalSum;
+    private double totalProb;
 
-    public AnalysisDistribution() {
-        this.dag = new Dag(CostType.SUM, StrategyType.RANDOM);
+    public AnalysisDistribution(Dag dag) {
+        this.dag = dag;
         this.costType = dag.getFactory().getType();
         this.strategy = dag.getStrategy();
         this.statesByCost = Maps.newHashMap();
         this.statesProbatility = Maps.newHashMap();
         this.visitedCounter = Maps.newHashMap();
-        this.totalSum = 0.0;
+        this.totalProb = 0.0;
 
         State root = dag.getRoot();
+        markVisitRoot(root);
         statesProbatility.put(root, 1.0);
-        markVisit(root);
-        for (State state : root.getNext()) {
-            statesProbatility.put(state, DiceProbability.get(state.dice()));
-            exploreDecisionNode(state);
-        }
+        exploreChanceNode(root);
         distribution();
         display();
+        write();
     }
 
-    private void display() {
-        for (Integer i : statesByCost.keySet()) {
-            Double prob = statesByCost.get(i);
-            System.out.println("Cost " +  i + ", prob = " + prob);
+    public double getTotalProb() {
+        return totalProb;
+    }
+
+    private void markVisitRoot(State root) {
+        visitedCounter.put(root, -1);
+    }
+
+    private void markVisit(State current) {
+        if (! visitedCounter.containsKey(current)) {
+            visitedCounter.put(current, 1);
+        } else {
+            visitedCounter.replace(current, visitedCounter.get(current) + 1);
         }
-        System.out.println("Total sum = " + totalSum);
     }
 
     private boolean visited(State current) {
         return visitedCounter.get(current) == current.getPrevious().size();
+    }
+
+    private void putProb(State current, State next, Double factor) {
+        Double prob = statesProbatility.get(current) * factor;
+        if (! statesProbatility.containsKey(next)) {
+            statesProbatility.put(next, prob);
+        } else {
+            Double currentCost = statesProbatility.get(next);
+            statesProbatility.replace(next, currentCost + prob);
+        }
     }
 
     private void exploreChanceNode(State current) {
@@ -75,24 +92,6 @@ public class AnalysisDistribution {
         }
     }
 
-    private void putProb(State current, State next, Double factor) {
-        Double prob = statesProbatility.get(current) * factor;
-        if (! statesProbatility.containsKey(next)) {
-            statesProbatility.put(next, prob);
-        } else {
-            Double currentCost = statesProbatility.get(next);
-            statesProbatility.replace(next, currentCost + prob);
-        }
-    }
-
-    private void markVisit(State current) {
-        if (! visitedCounter.containsKey(current)) {
-            visitedCounter.put(current, 1);
-        } else {
-            visitedCounter.replace(current, visitedCounter.get(current) + 1);
-        }
-    }
-
     private void putCost(Integer cost, Double prob) {
         if (! statesByCost.containsKey(cost)) {
             statesByCost.put(cost, prob);
@@ -102,13 +101,32 @@ public class AnalysisDistribution {
     }
 
     private void distribution() {
-        totalSum = 0;
+        totalProb = 0;
         for (State state : statesProbatility.keySet()) {
             if (state.hasNext()) {
                 Double prob = statesProbatility.get(state);
-                totalSum += prob;
+                totalProb += prob;
                 putCost(state.getScore(), prob);
             }
         }
     }
+
+    public void write() {
+        Csv csv = new Csv(getClass().getName(), "distribution", costType, strategy);
+        csv.add("Sum", "Probability");
+        for (Integer i : statesByCost.keySet()) {
+            double prob = statesByCost.get(i);
+            csv.add(i, prob);
+        }
+        csv.write();
+    }
+
+    private void display() {
+        for (Integer i : statesByCost.keySet()) {
+            double prob = statesByCost.get(i);
+            System.out.println("Cost " +  i + ", prob = " + prob);
+        }
+        System.out.println("Total sum = " + totalProb);
+    }
+
 }

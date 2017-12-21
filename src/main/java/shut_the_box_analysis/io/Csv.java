@@ -77,7 +77,7 @@ public class Csv {
     }
 
     private String format(Double d) {
-        return String.format(Locale.US, "%.2f", d);
+        return String.format(Locale.US, "%.4f", d);
     }
 
     public void write() {
