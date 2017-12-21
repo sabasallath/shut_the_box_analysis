@@ -7,7 +7,7 @@ import shut_the_box_analysis.simulation.Simulation;
 
 public class Simulate {
 
-    private final static int NB_GAME = 1000;
+    private final static int NB_GAME = 100000;
 
     public static void main(String[] args) {
         for (CostType costType : CostType.values()) {
@@ -18,7 +18,7 @@ public class Simulate {
 //        simulate(CostType.WIN_LOOSE, StrategyType.MAX);
 //        simulate(CostType.WIN_LOOSE, StrategyType.MIN);
 //        simulate(CostType.WIN_LOOSE, StrategyType.RANDOM);
-//        simulate(CostType.SUM, StrategyType.MIN);
+        simulate(CostType.SUM, StrategyType.MIN);
     }
 
     private static void simulate(CostType concat, StrategyType strategy) {

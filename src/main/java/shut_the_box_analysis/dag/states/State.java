@@ -15,6 +15,7 @@ public abstract class State {
     private List<State> next;
     private List<State> previous;
     private State strategyNext;
+    private Integer score;
 
     State(TreeSet<Integer> state, int dice) {
         this.state = state;
@@ -22,6 +23,8 @@ public abstract class State {
         this.next = new LinkedList<>();
         this.previous = new LinkedList<>();
         this.cost = setScore();
+        // todo Ugly !!!
+        this.score = (int) setScore();
     }
 
     State(TreeSet<Integer> state) {
@@ -30,7 +33,8 @@ public abstract class State {
         this.next = new LinkedList<>();
         this.previous = new LinkedList<>();
         this.cost = setScore();
-
+        // todo Ugly !!!
+        this.score = (int) setScore();
     }
 
     State(State chanceState, Integer dice) {
@@ -83,11 +87,11 @@ public abstract class State {
         return toString() + ", c = " + String.format("%.2f", cost);
     }
 
-    boolean isRoot() {
+    public boolean isRoot() {
         return this.getState().size() == StateConst.CHANCE_STATE_SIZE.get();
     }
 
-    boolean isLeaf() {
+    public boolean isLeaf() {
         return this.getState().size() == 0;
     }
 
@@ -111,4 +115,11 @@ public abstract class State {
         return state.toString() + "_" + dice();
     }
 
+    public Integer getScore() {
+        return score;
+    }
+
+    public boolean hasNext() {
+        return next.isEmpty();
+    }
 }

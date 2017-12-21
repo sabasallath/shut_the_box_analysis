@@ -15,8 +15,23 @@ public class AnalysisWinningDepth {
     private final CostType costType;
     private final StrategyType strategy;
 
+    public Double getSumByLevelControl() {
+        return sumByLevelControl;
+    }
+
+    public int getWinningLeafByLevelControl() {
+        return winningLeafByLevelControl;
+    }
+
+    private Double sumByLevelControl;
+    private int winningLeafByLevelControl;
+
 
     public AnalysisWinningDepth(Dag dag) {
+        // For test purpose
+        this.sumByLevelControl = 0.0;
+        this.winningLeafByLevelControl = 0;
+
         this.dag = dag;
         this.costType = dag.getFactory().getType();
         this.strategy = dag.getStrategy();
@@ -46,6 +61,7 @@ public class AnalysisWinningDepth {
         csv.add("Level", "Sum", "Mean");
         for (Integer i : statesByLevel.keySet()) {
             Double sum = statesByLevel.get(i).stream().mapToDouble(State::getCost).sum();
+            sumByLevelControl += sum;
             int size = statesByLevel.get(i).size();
             double mean = sum / size;
             csv.add(i, sum, mean);
@@ -60,6 +76,7 @@ public class AnalysisWinningDepth {
         State leaf = dag.getLeaf();
         for (Integer i : statesByLevel.keySet()) {
             int sum = statesByLevel.get(i).stream().mapToInt(e -> e.equals(leaf) ? 1 : 0).sum();
+            winningLeafByLevelControl += sum;
             int size = statesByLevel.get(i).size();
             csv.add(i, sum, size);
         }
