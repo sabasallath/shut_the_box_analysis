@@ -33,7 +33,7 @@ public class AnalysisDistribution {
         statesProbatility.put(root, 1.0);
         exploreChanceNode(root);
         distribution();
-        display();
+//        display();
         write();
     }
 
