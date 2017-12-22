@@ -20,3 +20,4 @@ source ploting/env/bin/activate
 
 ploting/src/plot.py
 ploting/src/plotDistribution.py
+ploting/src/plotDistributionSimulate.py

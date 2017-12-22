@@ -1,6 +1,7 @@
 package shut_the_box_analysis;
 
 import shut_the_box_analysis.analysis.AnalysisDistribution;
+import shut_the_box_analysis.analysis.AnalysisDistributionSimulate;
 import shut_the_box_analysis.analysis.AnalysisWinningDepth;
 import shut_the_box_analysis.dag.StrategyType;
 import shut_the_box_analysis.dag.states.CostType;
@@ -14,9 +15,8 @@ public class Analyse {
                 Dag dag = new Dag(costType, strategyType);
                 new AnalysisWinningDepth(dag);
                 new AnalysisDistribution(dag);
+                new AnalysisDistributionSimulate(dag);
             }
         }
-
     }
-
 }

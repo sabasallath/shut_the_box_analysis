@@ -32,30 +32,20 @@ public class Simulate {
                 "Rule for cost = " + concat.toString());
         Dag dag = new Dag(concat, strategy);
         Simulation simulation = new Simulation(dag);
-        HashMap<State, Integer> finalStates = new HashMap<>();
-        
+
         int winningCount = 0;
         for (int i = 0; i < NB_GAME; i++) {
-        	State finalState = simulation.run(false);
-        	if(finalStates.containsKey(finalState)){
-        		finalStates.replace(finalState,finalStates.get(finalState) + 1 );
-        	}else{
-        		finalStates.put(finalState, 1);
-        	}
-        	
-            //boolean win = finalState == dag.getLeaf();
-            //if (win) winningCount ++;
+            boolean win = simulation.run(false) == dag.getLeaf();
+            if (win) winningCount ++;
         }
-        
-        winningCount = finalStates.get(dag.getLeaf());
-        
+
         System.out.println("Winning Games : " + winningCount + "/" + NB_GAME);
         double ratio = ((double) winningCount / (double) NB_GAME) * 100;
         System.out.println("Winning Ratio : " + String.format("%.2f", ratio) + " %");
-        
+
         //System.out.println(finalStates);
-       
-        
+
+
     }
 
 }
