@@ -12,7 +12,7 @@ import java.util.Optional;
 
 public class AnalysisDistributionSimulate {
 
-    private final static int NB_GAME = 10000;
+    private final static int NB_GAME = 100000;
     private final CostType costType;
     private final StrategyType strategy;
     private final HashMap<Integer, Integer> finalStates;
@@ -31,11 +31,13 @@ public class AnalysisDistributionSimulate {
      * Prevent empty value.
      */
     private void fillGap() {
-        Optional<Integer> min = finalStates.keySet().stream().min(Integer::compareTo);
-        Optional<Integer> max = finalStates.keySet().stream().max(Integer::compareTo);
-        if (min.isPresent() && max.isPresent() && (costType == CostType.SUM)) {
-            for (int i = min.get(); i <= max.get(); i++) {
-                finalStates.putIfAbsent(i, 0);
+        if ((costType == CostType.SUM)) {
+            Optional<Integer> min = finalStates.keySet().stream().min(Integer::compareTo);
+            Optional<Integer> max = finalStates.keySet().stream().max(Integer::compareTo);
+            if (min.isPresent() && max.isPresent()) {
+                for (int i = min.get(); i <= max.get(); i++) {
+                    finalStates.putIfAbsent(i, 0);
+                }
             }
         }
     }
@@ -62,8 +64,8 @@ public class AnalysisDistributionSimulate {
         csv.add("Sum", "Quantity");
 
         for (Integer i : finalStates.keySet()) {
-            double qty = finalStates.get(i);
-            csv.add(i, qty);
+            Integer qty = finalStates.get(i);
+            csv.add(i, ((double) qty / (double) NB_GAME));
         }
         csv.write();
     }

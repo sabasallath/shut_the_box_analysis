@@ -4,6 +4,7 @@ import com.google.common.collect.ContiguousSet;
 import com.google.common.collect.DiscreteDomain;
 import com.google.common.collect.Range;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 public final class Dice {
 
@@ -26,9 +27,12 @@ public final class Dice {
     }
 
     public static int roll() {
-        return getInstance()
-                .random.nextInt(DiceConst.ELEMENTS.get())
-                + DiceConst.MIN.get();
+        int r1 = ThreadLocalRandom.current().nextInt(DiceConst.MINSIDE.get(), DiceConst.SIDES.get() + 1);
+        int r2 = ThreadLocalRandom.current().nextInt(DiceConst.MINSIDE.get(), DiceConst.SIDES.get() + 1);
+        return r1 + r2;
+//        return getInstance()
+//                .random.nextInt(DiceConst.MIN.get(), DiceConst.MAX.get())
+//                + DiceConst.MIN.get();
     }
 
     public static ContiguousSet<Integer> irange() {

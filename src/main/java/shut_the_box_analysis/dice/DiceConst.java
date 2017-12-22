@@ -5,7 +5,8 @@ public enum DiceConst {
     SIDES(6),
     MIN(2),
     MAX(MIN.get() * SIDES.get()),
-    ELEMENTS(MAX.get() - MIN.get() + 1);
+    ELEMENTS(MAX.get() - MIN.get() + 1),
+    MINSIDE(1);
 
     private final int size;
 

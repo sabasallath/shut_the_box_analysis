@@ -40,7 +40,7 @@ def plot(filename, width, height, label):
     data = pd.read_csv(input_file)
 
     plt.xticks(rotation=label)
-    sns.barplot(x='Sum', y='Probability', data=data, ax=ax1).set_title('Probability by Sum')
+    sns.barplot(x='Sum', y='Probability', data=data, ax=ax1).set_title('Probability by Sum Theorical')
     plt.savefig(output_file)
 
 # ------------------------------------------------

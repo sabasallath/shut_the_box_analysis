@@ -17,7 +17,7 @@ public class DiceTest {
     public void diceRollTest() {
         int min = DiceConst.MIN.get();
         int max = DiceConst.MAX.get();
-        int[] usedDiceValue = new int[max - min + 1];
+        int[] usedDiceValue = new int[DiceConst.ELEMENTS.get()];
 
         Arrays.fill(usedDiceValue, 0);
 
