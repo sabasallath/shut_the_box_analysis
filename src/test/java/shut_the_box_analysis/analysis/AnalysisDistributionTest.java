@@ -14,6 +14,6 @@ public class AnalysisDistributionTest {
     public void distributionTest() {
         AnalysisDistribution analysis = new AnalysisDistribution(new Dag(CostType.SUM, StrategyType.MIN));
         //todo why 0.0337 diff ?
-        assertEquals(0.9773, analysis.getTotalProb(), TestConst.delta);
+        assertEquals(0.9999, analysis.getTotalProb(), TestConst.DELTA);
     }
 }

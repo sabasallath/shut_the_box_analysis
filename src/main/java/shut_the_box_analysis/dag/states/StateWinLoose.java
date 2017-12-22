@@ -12,12 +12,8 @@ public class StateWinLoose extends State {
         super(state);
     }
 
-    StateWinLoose(State chanceState, Integer dice) {
-        super(chanceState, dice);
-    }
-
     @Override
-    double setScore() {
+    int setScore() {
         if (this.isLeaf()) {
             return 1;
         } else {

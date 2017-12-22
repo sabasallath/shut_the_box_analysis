@@ -24,19 +24,23 @@ public enum StrategyType {
         return s;
     }
 
-    public Function<State, Optional<State>> get() {
+    public Function<State, State> get() {
         switch (this) {
             case MIN:
                 return state -> state.getNext().stream()
-                        .min(Comparator.comparingDouble(State::getCost));
+                        .min(Comparator.comparingDouble(State::getCost))
+                        .orElseThrow(() -> new RuntimeException("No next - should never happen."));
             case MAX:
                 return state -> state.getNext().stream()
-                        .max(Comparator.comparingDouble(State::getCost));
+                        .max(Comparator.comparingDouble(State::getCost))
+                        .orElseThrow(() -> new RuntimeException("No next - should never happen."));
             case RANDOM:
                 return state -> {
                     List<State> l = state.getNext();
                     Collections.shuffle(l);
-                    return l.stream().findFirst();
+                    return l.stream()
+                            .findFirst()
+                            .orElseThrow(() -> new RuntimeException("No next - should never happen."));
                 };
         }
         throw new RuntimeException("Should not happen");

@@ -10,38 +10,27 @@ import java.util.TreeSet;
 public abstract class State {
 
     private final int dice;
+    private final List<State> next;
+    private final List<State> previous;
+    private final Integer score;
     private double cost;
-    TreeSet<Integer> state;
-    private List<State> next;
-    private List<State> previous;
+    final TreeSet<Integer> state;
     private State strategyNext;
-    private Integer score;
 
     State(TreeSet<Integer> state, int dice) {
         this.state = state;
         this.dice = dice;
         this.next = new LinkedList<>();
         this.previous = new LinkedList<>();
-        this.cost = setScore();
-        // todo Ugly !!!
-        this.score = (int) setScore();
+        this.score = setScore();
+        this.cost = score;
     }
 
     State(TreeSet<Integer> state) {
-        this.state = state;
-        this.dice = 0;
-        this.next = new LinkedList<>();
-        this.previous = new LinkedList<>();
-        this.cost = setScore();
-        // todo Ugly !!!
-        this.score = (int) setScore();
+        this(state, 0);
     }
 
-    State(State chanceState, Integer dice) {
-        this(Sets.newTreeSet(chanceState.getState()), dice);
-    }
-
-    abstract double setScore();
+    abstract int setScore();
 
     public TreeSet<Integer> getState() {
         return state;
@@ -95,6 +84,14 @@ public abstract class State {
         return this.getState().size() == 0;
     }
 
+    public Integer getScore() {
+        return score;
+    }
+
+    public boolean hasNext() {
+        return next.isEmpty();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -113,13 +110,5 @@ public abstract class State {
     @Override
     public String toString() {
         return state.toString() + "_" + dice();
-    }
-
-    public Integer getScore() {
-        return score;
-    }
-
-    public boolean hasNext() {
-        return next.isEmpty();
     }
 }

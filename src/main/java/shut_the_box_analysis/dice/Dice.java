@@ -27,12 +27,13 @@ public final class Dice {
     }
 
     public static int roll() {
-        int r1 = ThreadLocalRandom.current().nextInt(DiceConst.MINSIDE.get(), DiceConst.SIDES.get() + 1);
-        int r2 = ThreadLocalRandom.current().nextInt(DiceConst.MINSIDE.get(), DiceConst.SIDES.get() + 1);
-        return r1 + r2;
-//        return getInstance()
-//                .random.nextInt(DiceConst.MIN.get(), DiceConst.MAX.get())
-//                + DiceConst.MIN.get();
+        int d1 = rollOneDice();
+        int d2 = rollOneDice();
+        return d1 + d2;
+    }
+
+    private static int rollOneDice() {
+        return ThreadLocalRandom.current().nextInt(DiceConst.MINSIDE.get(), DiceConst.SIDES.get() + 1);
     }
 
     public static ContiguousSet<Integer> irange() {

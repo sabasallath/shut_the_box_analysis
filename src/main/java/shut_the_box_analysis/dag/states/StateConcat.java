@@ -12,15 +12,11 @@ public class StateConcat extends State {
         super(state);
     }
 
-    StateConcat(State state, Integer dice) {
-        super(state, dice);
-    }
-
     @Override
-    double setScore() {
+    int setScore() {
         StringBuilder sb = new StringBuilder();
         state.forEach(sb::append);
         String s = sb.toString();
-        return s.equals("") ? 0.0 : Double.parseDouble(s);
+        return s.equals("") ? 0 : Integer.parseInt(s);
     }
 }

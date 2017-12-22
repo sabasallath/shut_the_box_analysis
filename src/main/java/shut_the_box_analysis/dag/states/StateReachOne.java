@@ -15,14 +15,10 @@ public class StateReachOne extends State {
         super(state);
     }
 
-    StateReachOne(State chanceState, Integer dice) {
-        super(chanceState, dice);
-    }
-
     @Override
-    double setScore() {
+    int setScore() {
         if (this.getState().stream().mapToInt(Integer::intValue).sum() == BoxConst.MIN.get()) {
-            return 1.0;
+            return 1;
         } else {
             return 0;
         }

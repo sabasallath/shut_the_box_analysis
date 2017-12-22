@@ -14,42 +14,42 @@ public class AnalysisWinningDepthTest {
     @Test
     public void winningDepthConcatMinTest() {
         AnalysisWinningDepth analysis = new AnalysisWinningDepth(new Dag(CostType.CONCAT, StrategyType.MIN));
-        assertEquals(48513649.5203, analysis.getSumByLevelControl(), TestConst.delta);
+        assertEquals(48474591.9287, analysis.getSumByLevelControl(), TestConst.DELTA);
         assertEquals(5, analysis.getWinningLeafByLevelControl());
     }
 
     @Test
     public void winningDepthConcatMaxTest() {
         AnalysisWinningDepth analysis = new AnalysisWinningDepth(new Dag(CostType.CONCAT, StrategyType.MAX));
-        assertEquals(67847185.7282, analysis.getSumByLevelControl(), TestConst.delta);
+        assertEquals(67836598.8146, analysis.getSumByLevelControl(), TestConst.DELTA);
         assertEquals(5, analysis.getWinningLeafByLevelControl());
     }
 
     @Test
     public void winningDepthSumMinTest() {
         AnalysisWinningDepth analysis = new AnalysisWinningDepth(new Dag(CostType.SUM, StrategyType.MIN));
-        assertEquals(130839.7193, analysis.getSumByLevelControl(), TestConst.delta);
+        assertEquals(127713.3377, analysis.getSumByLevelControl(), TestConst.DELTA);
         assertEquals(5, analysis.getWinningLeafByLevelControl());
     }
 
     @Test
     public void winningDepthSumMaxTest() {
         AnalysisWinningDepth analysis = new AnalysisWinningDepth(new Dag(CostType.SUM, StrategyType.MAX));
-        assertEquals(55749.3212, analysis.getSumByLevelControl(), TestConst.delta);
+        assertEquals(55751.9386, analysis.getSumByLevelControl(), TestConst.DELTA);
         assertEquals(5, analysis.getWinningLeafByLevelControl());
     }
 
     @Test
     public void winningDepthMinMinTest() {
         AnalysisWinningDepth analysis = new AnalysisWinningDepth(new Dag(CostType.WIN_LOOSE, StrategyType.MIN));
-        assertEquals(151.3676, analysis.getSumByLevelControl(), TestConst.delta);
+        assertEquals(151.3676, analysis.getSumByLevelControl(), TestConst.DELTA);
         assertEquals(5, analysis.getWinningLeafByLevelControl());
     }
 
     @Test
     public void winningDepthMinMaxTest() {
         AnalysisWinningDepth analysis = new AnalysisWinningDepth(new Dag(CostType.WIN_LOOSE, StrategyType.MAX));
-        assertEquals(760.7884, analysis.getSumByLevelControl(), TestConst.delta);
+        assertEquals(760.7884, analysis.getSumByLevelControl(), TestConst.DELTA);
         assertEquals(5, analysis.getWinningLeafByLevelControl());
     }
 }

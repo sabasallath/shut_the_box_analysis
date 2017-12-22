@@ -12,11 +12,7 @@ public class StateSum extends State {
         super(state);
     }
 
-    StateSum(State state, Integer dice) {
-        super(state, dice);
-    }
-
     @Override
-    double setScore() {
+    int setScore() {
         return state.stream().mapToInt(Integer::intValue).sum();    }
 }

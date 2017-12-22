@@ -14,31 +14,33 @@ import java.util.function.Consumer;
 public class Dag {
 
     private final Decomposition decomposition;
-    private final HashMap<Integer, State> transitionTreeMutable;
+    private final HashMap<Integer, State> transitionDag;
+    private final HashMap<State, State> leafs;
+    private final HashMap<State, Integer> visitedCounter;
+    private final StateFactory factory;
+    private final StrategyType strategy;
     private final State root;
     private final State leaf;
-    private final StateFactory factory;
-    private final HashMap<State, State> leafs;
-    private HashMap<State, Integer> visitedCounter;
-    private StrategyType strategy;
 
     public Dag(CostType costType, StrategyType strategy) {
         this.factory = new StateFactory(costType);
         this.strategy = strategy;
         this.root = factory.state(Sets.newTreeSet(Box.irange()));
-        if (costType == CostType.REACH_ONE) {
-            this.leaf = factory.state(Sets.newTreeSet(Lists.newArrayList(1)));
-        } else {
-            this.leaf = factory.state(Sets.newTreeSet());
-        }
-        this.leafs = Maps.newHashMap();
-        this.transitionTreeMutable = Maps.newHashMap();
+        this.leaf = chooseLeaf(costType);
         this.decomposition = new Decomposition(factory);
-        createTransitionDag();
-//        assignCost();
+        this.leafs = Maps.newHashMap();
+        this.transitionDag = Maps.newHashMap();
         this.visitedCounter = Maps.newHashMap();
-        leafs.put(leaf, leaf);
-        assignTrueCost(leafs.keySet());
+        createTransitionDag();
+        assignCost();
+    }
+
+    private State chooseLeaf(CostType costType) {
+        if (costType == CostType.REACH_ONE) {
+            return factory.state(Sets.newTreeSet(Lists.newArrayList(1)));
+        } else {
+            return factory.state(Sets.newTreeSet());
+        }
     }
 
     /* -------------------------------------------------------
@@ -46,8 +48,8 @@ public class Dag {
      -------------------------------------------------------*/
 
     private void createTransitionDag() {
-        transitionTreeMutable.put(root.hashCode(), root);
-        transitionTreeMutable.put(leaf.hashCode(), leaf);
+        transitionDag.put(root.hashCode(), root);
+        transitionDag.put(leaf.hashCode(), leaf);
         addChanceNode(root);
     }
 
@@ -69,10 +71,10 @@ public class Dag {
     }
 
     private void link(State current, State nextState, Consumer<State> f) {
-        if (transitionTreeMutable.containsKey(nextState.hashCode())) {
-            nextState = transitionTreeMutable.get(nextState.hashCode());
+        if (transitionDag.containsKey(nextState.hashCode())) {
+            nextState = transitionDag.get(nextState.hashCode());
         } else {
-            transitionTreeMutable.put(nextState.hashCode(), nextState);
+            transitionDag.put(nextState.hashCode(), nextState);
             f.accept(nextState);
         }
 
@@ -83,34 +85,6 @@ public class Dag {
     /* -------------------------------------------------------
         Assign Cost
      -------------------------------------------------------*/
-
-//    private void assignCost() {
-//        ArrayDeque<State> todoState = new ArrayDeque<>();
-//        todoState.addAll(leaf.getPrevious());
-//
-//        while (!todoState.isEmpty()) {
-//            State current = todoState.pollFirst();
-//            addNotDonePrevious(todoState, current);
-//            if (current.dice() == 0) {
-//                double sum = current.getNext().stream()
-//                        .mapToDouble(e -> DiceProbability.get(e.dice()) * e.getCost())
-//                        .sum();
-//                current.setCost(sum);
-//            } else {
-//                State next = strategy.get().apply(current);
-//                current.setCost(next.getCost());
-//                current.setStrategyNext(next);
-//            }
-//        }
-//    }
-//
-//    private void addNotDonePrevious(ArrayDeque<State> todo, State current) {
-//        for (State previous : current.getPrevious()) {
-//            if (!todo.contains(previous)) {
-//                todo.add(previous);
-//            }
-//        }
-//    }
 
     private void markVisitRoot(State root) {
         visitedCounter.put(root, -1);
@@ -131,19 +105,16 @@ public class Dag {
     private void explore(State current) {
         markVisit(current);
         if (visited(current)) {
-            if(! current.getNext().isEmpty()) {
+            if(! current.hasNext()) {
                 if (current.dice() == 0) {
                     double sum = current.getNext().stream()
                             .mapToDouble(e -> DiceProbability.get(e.dice()) * e.getCost())
                             .sum();
                     current.setCost(sum);
                 } else {
-                    Optional<State> optionalNext = strategy.get().apply(current);
-                    if (optionalNext.isPresent()) {
-                        State next = optionalNext.get();
-                        current.setCost(next.getCost());
-                        current.setStrategyNext(next);
-                    }
+                    State next = strategy.get().apply(current);
+                    current.setCost(next.getCost());
+                    current.setStrategyNext(next);
                 }
             }
 
@@ -153,12 +124,17 @@ public class Dag {
         }
     }
 
-    private void assignTrueCost(Set<State> states) {
-        for (State state : states) {
+    private void assignCost() {
+        leafs.put(leaf, leaf);
+        for (State state : leafs.keySet()) {
             markVisitRoot(state);
             explore(state);
         }
     }
+
+    /* -------------------------------------------------------
+        Getter
+     -------------------------------------------------------*/
 
     public State getRoot() {
         return root;
@@ -169,7 +145,7 @@ public class Dag {
     }
 
     public State get(int hashcode) {
-        return transitionTreeMutable.get(hashcode);
+        return transitionDag.get(hashcode);
     }
 
     public StateFactory getFactory() {
