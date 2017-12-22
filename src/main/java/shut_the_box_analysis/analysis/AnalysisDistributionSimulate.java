@@ -2,8 +2,8 @@ package shut_the_box_analysis.analysis;
 
 import shut_the_box_analysis.dag.Dag;
 import shut_the_box_analysis.dag.StrategyType;
-import shut_the_box_analysis.dag.states.CostType;
-import shut_the_box_analysis.dag.states.State;
+import shut_the_box_analysis.states.CostType;
+import shut_the_box_analysis.states.State;
 import shut_the_box_analysis.io.Csv;
 import shut_the_box_analysis.simulation.Simulation;
 
@@ -27,36 +27,11 @@ public class AnalysisDistributionSimulate {
         write();
     }
 
-    /**
-     * Prevent empty value.
-     */
-    private void fillGap() {
-        if ((costType == CostType.SUM)) {
-            Optional<Integer> min = finalStates.keySet().stream().min(Integer::compareTo);
-            Optional<Integer> max = finalStates.keySet().stream().max(Integer::compareTo);
-            if (min.isPresent() && max.isPresent()) {
-                for (int i = min.get(); i <= max.get(); i++) {
-                    finalStates.putIfAbsent(i, 0);
-                }
-            }
-        }
-    }
-
-    private void putState(State state) {
-        Integer score = state.getScore();
-        if (finalStates.containsKey(score)) {
-            finalStates.replace(score, finalStates.get(score) + 1);
-        } else {
-            finalStates.put(score, 1);
-        }
-    }
-
     private void distribution() {
         for (int i = 0; i < NB_GAME; i++) {
-            State state = simulation.run(false);
-            putState(state);
+            State state = simulation.run();
+            finalStates.merge(state.getScore(), 1, (v1, v2) -> v1 + v2);
         }
-        fillGap();
     }
 
     private void write() {

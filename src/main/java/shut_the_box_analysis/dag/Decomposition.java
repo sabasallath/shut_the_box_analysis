@@ -2,9 +2,9 @@ package shut_the_box_analysis.dag;
 
 import com.google.common.collect.*;
 import shut_the_box_analysis.box.Box;
-import shut_the_box_analysis.dag.states.StateFactory;
+import shut_the_box_analysis.states.StateFactory;
 import shut_the_box_analysis.dice.Dice;
-import shut_the_box_analysis.dag.states.State;
+import shut_the_box_analysis.states.State;
 
 import java.util.LinkedList;
 import java.util.List;

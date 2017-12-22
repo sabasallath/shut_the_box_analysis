@@ -2,7 +2,7 @@ package shut_the_box_analysis.dag;
 
 import org.junit.Test;
 import shut_the_box_analysis.TestConst;
-import shut_the_box_analysis.dag.states.CostType;
+import shut_the_box_analysis.states.CostType;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;

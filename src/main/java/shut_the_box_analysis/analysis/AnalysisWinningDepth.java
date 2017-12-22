@@ -4,9 +4,9 @@ import com.google.common.collect.Multimap;
 import com.google.common.collect.MultimapBuilder;
 import shut_the_box_analysis.dag.Dag;
 import shut_the_box_analysis.dag.StrategyType;
-import shut_the_box_analysis.dag.states.CostType;
+import shut_the_box_analysis.states.CostType;
 import shut_the_box_analysis.io.Csv;
-import shut_the_box_analysis.dag.states.State;
+import shut_the_box_analysis.states.State;
 
 public class AnalysisWinningDepth {
 

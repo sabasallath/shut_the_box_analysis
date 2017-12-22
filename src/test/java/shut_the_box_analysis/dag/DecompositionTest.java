@@ -6,10 +6,9 @@ import com.google.common.collect.Sets;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-import shut_the_box_analysis.dag.Decomposition;
-import shut_the_box_analysis.dag.states.CostType;
-import shut_the_box_analysis.dag.states.State;
-import shut_the_box_analysis.dag.states.StateFactory;
+import shut_the_box_analysis.states.CostType;
+import shut_the_box_analysis.states.State;
+import shut_the_box_analysis.states.StateFactory;
 
 import java.util.BitSet;
 import java.util.LinkedList;

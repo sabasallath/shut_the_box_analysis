@@ -1,7 +1,6 @@
-package shut_the_box_analysis.dag.states;
+package shut_the_box_analysis.states;
 
 import com.google.common.base.Objects;
-import com.google.common.collect.Sets;
 
 import java.util.LinkedList;
 import java.util.List;

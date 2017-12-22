@@ -2,11 +2,11 @@ package shut_the_box_analysis.dag;
 
 import com.google.common.collect.*;
 import shut_the_box_analysis.box.Box;
-import shut_the_box_analysis.dag.states.CostType;
-import shut_the_box_analysis.dag.states.StateFactory;
+import shut_the_box_analysis.states.CostType;
+import shut_the_box_analysis.states.StateFactory;
 import shut_the_box_analysis.dice.Dice;
 import shut_the_box_analysis.dice.DiceProbability;
-import shut_the_box_analysis.dag.states.State;
+import shut_the_box_analysis.states.State;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -90,12 +90,8 @@ public class Dag {
         visitedCounter.put(root, -1);
     }
 
-    private void markVisit(State current) {
-        if (! visitedCounter.containsKey(current)) {
-            visitedCounter.put(current, 1);
-        } else {
-            visitedCounter.replace(current, visitedCounter.get(current) + 1);
-        }
+    private void incrementVisit(State current) {
+        visitedCounter.merge(current, 1, (v1, v2) -> v1 + v2);
     }
 
     private boolean visited(State current) {
@@ -103,7 +99,7 @@ public class Dag {
     }
 
     private void explore(State current) {
-        markVisit(current);
+        incrementVisit(current);
         if (visited(current)) {
             if(! current.hasNext()) {
                 if (current.dice() == 0) {

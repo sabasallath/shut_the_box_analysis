@@ -1,7 +1,6 @@
-package shut_the_box_analysis.dag.states;
+package shut_the_box_analysis.states;
 
 import shut_the_box_analysis.box.BoxConst;
-import shut_the_box_analysis.dice.DiceConst;
 
 import java.util.TreeSet;
 

@@ -4,7 +4,7 @@ import shut_the_box_analysis.analysis.AnalysisDistribution;
 import shut_the_box_analysis.analysis.AnalysisDistributionSimulate;
 import shut_the_box_analysis.analysis.AnalysisWinningDepth;
 import shut_the_box_analysis.dag.StrategyType;
-import shut_the_box_analysis.dag.states.CostType;
+import shut_the_box_analysis.states.CostType;
 import shut_the_box_analysis.dag.Dag;
 
 public class Analyse {

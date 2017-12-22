@@ -2,7 +2,7 @@ package shut_the_box_analysis.simulation;
 
 import shut_the_box_analysis.dag.Dag;
 import shut_the_box_analysis.dice.Dice;
-import shut_the_box_analysis.dag.states.State;
+import shut_the_box_analysis.states.State;
 
 import java.util.StringJoiner;
 import java.util.stream.Collectors;
@@ -47,5 +47,9 @@ public class Simulation {
                 .add(current.getNext().stream()
                         .map(State::stateAndCost)
                         .collect(Collectors.joining("\n")));
+    }
+
+    public State run() {
+        return run(false);
     }
 }

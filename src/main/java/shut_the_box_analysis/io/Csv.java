@@ -3,7 +3,7 @@ package shut_the_box_analysis.io;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import shut_the_box_analysis.dag.StrategyType;
-import shut_the_box_analysis.dag.states.CostType;
+import shut_the_box_analysis.states.CostType;
 
 import java.io.File;
 import java.io.IOException;
