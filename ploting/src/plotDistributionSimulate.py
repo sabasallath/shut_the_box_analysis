@@ -25,7 +25,8 @@ filenames2 = [f for f in os.listdir(root_foldername + foldername)
               if f.startswith("distribution_win_loose") and f.endswith(".csv")]
 filenames3 = [f for f in os.listdir(root_foldername + foldername)
               if f.startswith("distribution_concat") and f.endswith(".csv")]
-
+filenames4 = [f for f in os.listdir(root_foldername + foldername)
+              if f.startswith("distribution_reach_one") and f.endswith(".csv")]
 
 # ------------------------------------------------
 # Plot function
@@ -42,6 +43,7 @@ def plot(filename, width, height, label):
     plt.xticks(rotation=label)
     sns.barplot(x='Sum', y='Quantity', data=data, ax=ax1).set_title('Probability by Sum Simulation')
     plt.savefig(output_file)
+    plt.close(fig)
 
 # ------------------------------------------------
 # Script
@@ -52,3 +54,5 @@ for f in filenames2:
     plot(f, 6, 8, 0)
 for f in filenames3:
     plot(f, 60, 8, -90)
+for f in filenames4:
+    plot(f, 8, 6, 0)

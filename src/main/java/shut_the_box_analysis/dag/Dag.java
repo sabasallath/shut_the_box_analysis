@@ -1,8 +1,6 @@
 package shut_the_box_analysis.dag;
 
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
+import com.google.common.collect.*;
 import shut_the_box_analysis.box.Box;
 import shut_the_box_analysis.dag.states.CostType;
 import shut_the_box_analysis.dag.states.StateFactory;
@@ -20,19 +18,28 @@ public class Dag {
     private final State root;
     private final State leaf;
     private final StateFactory factory;
+    private final HashMap<State, State> leafs;
+    private HashMap<State, Integer> visitedCounter;
     private StrategyType strategy;
 
     public Dag(CostType costType, StrategyType strategy) {
         this.factory = new StateFactory(costType);
         this.strategy = strategy;
         this.root = factory.state(Sets.newTreeSet(Box.irange()));
-        this.leaf = factory.state(Sets.newTreeSet());
+        if (costType == CostType.REACH_ONE) {
+            this.leaf = factory.state(Sets.newTreeSet(Lists.newArrayList(1)));
+        } else {
+            this.leaf = factory.state(Sets.newTreeSet());
+        }
+        this.leafs = Maps.newHashMap();
         this.transitionTreeMutable = Maps.newHashMap();
         this.decomposition = new Decomposition(factory);
         createTransitionDag();
-        assignCost();
+//        assignCost();
+        this.visitedCounter = Maps.newHashMap();
+        leafs.put(leaf, leaf);
+        assignTrueCost(leafs.keySet());
     }
-
 
     /* -------------------------------------------------------
         Create transition Tree
@@ -52,7 +59,11 @@ public class Dag {
     }
 
     private void addDecisionNode(State current) {
-        for (State nextState : decomposition.getValid(current)) {
+        ImmutableList<State> next = decomposition.getValid(current);
+        if (next.isEmpty()) {
+            leafs.putIfAbsent(current, current);
+        }
+        for (State nextState : next) {
             link(current, nextState, this::addChanceNode);
         }
     }
@@ -73,31 +84,79 @@ public class Dag {
         Assign Cost
      -------------------------------------------------------*/
 
-    private void assignCost() {
-        ArrayDeque<State> todoState = new ArrayDeque<>();
-        todoState.addAll(leaf.getPrevious());
+//    private void assignCost() {
+//        ArrayDeque<State> todoState = new ArrayDeque<>();
+//        todoState.addAll(leaf.getPrevious());
+//
+//        while (!todoState.isEmpty()) {
+//            State current = todoState.pollFirst();
+//            addNotDonePrevious(todoState, current);
+//            if (current.dice() == 0) {
+//                double sum = current.getNext().stream()
+//                        .mapToDouble(e -> DiceProbability.get(e.dice()) * e.getCost())
+//                        .sum();
+//                current.setCost(sum);
+//            } else {
+//                State next = strategy.get().apply(current);
+//                current.setCost(next.getCost());
+//                current.setStrategyNext(next);
+//            }
+//        }
+//    }
+//
+//    private void addNotDonePrevious(ArrayDeque<State> todo, State current) {
+//        for (State previous : current.getPrevious()) {
+//            if (!todo.contains(previous)) {
+//                todo.add(previous);
+//            }
+//        }
+//    }
 
-        while (!todoState.isEmpty()) {
-            State current = todoState.pollFirst();
-            addNotDonePrevious(todoState, current);
-            if (current.dice() == 0) {
-                double sum = current.getNext().stream()
-                        .mapToDouble(e -> DiceProbability.get(e.dice()) * e.getCost())
-                        .sum();
-                current.setCost(sum);
-            } else {
-                State next = strategy.get().apply(current);
-                current.setCost(next.getCost());
-                current.setStrategyNext(next);
+    private void markVisitRoot(State root) {
+        visitedCounter.put(root, -1);
+    }
+
+    private void markVisit(State current) {
+        if (! visitedCounter.containsKey(current)) {
+            visitedCounter.put(current, 1);
+        } else {
+            visitedCounter.replace(current, visitedCounter.get(current) + 1);
+        }
+    }
+
+    private boolean visited(State current) {
+        return visitedCounter.get(current) == current.getNext().size();
+    }
+
+    private void explore(State current) {
+        markVisit(current);
+        if (visited(current)) {
+            if(! current.getNext().isEmpty()) {
+                if (current.dice() == 0) {
+                    double sum = current.getNext().stream()
+                            .mapToDouble(e -> DiceProbability.get(e.dice()) * e.getCost())
+                            .sum();
+                    current.setCost(sum);
+                } else {
+                    Optional<State> optionalNext = strategy.get().apply(current);
+                    if (optionalNext.isPresent()) {
+                        State next = optionalNext.get();
+                        current.setCost(next.getCost());
+                        current.setStrategyNext(next);
+                    }
+                }
+            }
+
+            for (State previous : current.getPrevious()) {
+                explore(previous);
             }
         }
     }
 
-    private void addNotDonePrevious(ArrayDeque<State> todo, State current) {
-        for (State previous : current.getPrevious()) {
-            if (!todo.contains(previous)) {
-                todo.add(previous);
-            }
+    private void assignTrueCost(Set<State> states) {
+        for (State state : states) {
+            markVisitRoot(state);
+            explore(state);
         }
     }
 

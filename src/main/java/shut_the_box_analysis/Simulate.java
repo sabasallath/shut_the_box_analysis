@@ -11,18 +11,19 @@ import shut_the_box_analysis.simulation.Simulation;
 
 public class Simulate {
 
-    private final static int NB_GAME = 1000;
+    private final static int NB_GAME = 1;
 
     public static void main(String[] args) {
-        for (CostType costType : CostType.values()) {
-            for (StrategyType strategy : StrategyType.values()) {
-                simulate(costType, strategy);
-            }
-        }
+//        for (CostType costType : CostType.values()) {
+//            for (StrategyType strategy : StrategyType.values()) {
+//                simulate(costType, strategy);
+//            }
+//        }
 //        simulate(CostType.WIN_LOOSE, StrategyType.MAX);
 //        simulate(CostType.WIN_LOOSE, StrategyType.MIN);
 //        simulate(CostType.WIN_LOOSE, StrategyType.RANDOM);
 //        simulate(CostType.SUM, StrategyType.MIN);
+        simulate(CostType.WIN_LOOSE, StrategyType.MAX);
     }
 
     private static void simulate(CostType concat, StrategyType strategy) {
@@ -35,7 +36,7 @@ public class Simulate {
 
         int winningCount = 0;
         for (int i = 0; i < NB_GAME; i++) {
-            boolean win = simulation.run(false) == dag.getLeaf();
+            boolean win = simulation.run(true) == dag.getLeaf();
             if (win) winningCount ++;
         }
 

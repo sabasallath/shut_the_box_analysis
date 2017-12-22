@@ -5,6 +5,7 @@ import shut_the_box_analysis.dag.states.State;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 
 public enum StrategyType {
@@ -23,21 +24,19 @@ public enum StrategyType {
         return s;
     }
 
-    public Function<State, State> get() {
+    public Function<State, Optional<State>> get() {
         switch (this) {
             case MIN:
                 return state -> state.getNext().stream()
-                        .min(Comparator.comparingDouble(State::getCost))
-                        .orElseThrow(() -> new RuntimeException("No next - should never happen."));
+                        .min(Comparator.comparingDouble(State::getCost));
             case MAX:
                 return state -> state.getNext().stream()
-                        .max(Comparator.comparingDouble(State::getCost))
-                        .orElseThrow(() -> new RuntimeException("No next - should never happen."));
+                        .max(Comparator.comparingDouble(State::getCost));
             case RANDOM:
                 return state -> {
                     List<State> l = state.getNext();
                     Collections.shuffle(l);
-                    return l.stream().findFirst().orElseThrow(() -> new RuntimeException("No next - should never happen."));
+                    return l.stream().findFirst();
                 };
         }
         throw new RuntimeException("Should not happen");

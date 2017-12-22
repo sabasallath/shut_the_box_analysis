@@ -40,7 +40,7 @@ def plot(filename, y1, y2):
     sns.barplot(x='Level', y=y2, data=data, ax=ax2).set_title('Mean of score by level')
 
     plt.savefig(output_file)
-
+    plt.close(fig)
 
 # ------------------------------------------------
 # Script
