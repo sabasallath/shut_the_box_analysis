@@ -32,6 +32,9 @@ public class AnalysisDistribution {
         exploreChanceNode(root);
         distribution();
         write();
+        if (costType == CostType.CONCAT) {
+            distributionSumConcat();
+        }
     }
 
     private void markVisitRoot(State root) {
@@ -96,10 +99,28 @@ public class AnalysisDistribution {
     }
 
     public void write() {
-        Csv csv = new Csv(getClass().getName(), "distribution", costType, strategy);
+        write(statesByCost, "distribution");
+    }
+
+    /**
+     * To compare the use of the strategy concat with the sum rule.
+     */
+    private void distributionSumConcat() {
+        HashMap<Integer, Double> bySum = Maps.newHashMap();
+        for (State state : statesProbatility.keySet()) {
+            if (state.hasNext()) {
+                int sum = state.getState().stream().mapToInt(Integer::intValue).sum();
+                bySum.merge(sum, statesProbatility.get(state), (v1, v2) -> v1 + v2);
+            }
+        }
+        write(bySum, "distribution_sumConcat");
+    }
+
+    private void write(HashMap<Integer, Double> bySum, String distribution_sumConcat) {
+        Csv csv = new Csv(getClass().getName(), distribution_sumConcat, costType, strategy);
         csv.add("Sum", "Probability");
-        for (Integer i : statesByCost.keySet()) {
-            double prob = statesByCost.get(i);
+        for (Integer i : bySum.keySet()) {
+            double prob = bySum.get(i);
             csv.add(i, prob);
         }
         csv.write();

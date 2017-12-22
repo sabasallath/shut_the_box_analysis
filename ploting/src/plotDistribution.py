@@ -27,6 +27,8 @@ filenames3 = [f for f in os.listdir(root_foldername + foldername)
               if f.startswith("distribution_concat") and f.endswith(".csv")]
 filenames4 = [f for f in os.listdir(root_foldername + foldername)
               if f.startswith("distribution_reach_one") and f.endswith(".csv")]
+filenames5 = [f for f in os.listdir(root_foldername + foldername)
+              if f.startswith("distribution_sumConcat_concat") and f.endswith(".csv")]
 
 # ------------------------------------------------
 # Plot function
@@ -55,4 +57,6 @@ for f in filenames2:
 for f in filenames3:
     plot(f, 60, 8, -90)
 for f in filenames4:
+    plot(f, 8, 6, 0)
+for f in filenames5:
     plot(f, 8, 6, 0)
