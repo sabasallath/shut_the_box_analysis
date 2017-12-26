@@ -17,6 +17,7 @@ import java.util.Locale;
 public class Csv {
 
     private final CostType costType;
+    private final Path outPath;
     private CSVPrinter csvPrinter;
     private final String baseOutputFolder = "output/";
     private StrategyType strategy;
@@ -26,7 +27,7 @@ public class Csv {
         this.strategy = strategy;
         createFolder(baseOutputFolder);
         String folderName = createFolder(formatFolder(subFolder));
-        Path outPath = Paths.get(formatFilename(folderName, filename));
+        outPath = Paths.get(formatFilename(folderName, filename));
         try {
             csvPrinter = new CSVPrinter(Files.newBufferedWriter(outPath), CSVFormat.DEFAULT);
         } catch (IOException e) {
@@ -86,5 +87,9 @@ public class Csv {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public String getOutPath() {
+        return outPath.toString();
     }
 }

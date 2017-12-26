@@ -2,6 +2,8 @@ package shut_the_box_analysis.analysis;
 
 import java.util.HashMap;
 import com.google.common.collect.Maps;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import shut_the_box_analysis.dag.Dag;
 import shut_the_box_analysis.dag.StrategyType;
 import shut_the_box_analysis.states.CostType;
@@ -10,6 +12,8 @@ import shut_the_box_analysis.dice.DiceProbability;
 import shut_the_box_analysis.io.Csv;
 
 public class AnalysisDistribution {
+
+    private final static Logger logger = LoggerFactory.getLogger(AnalysisDistribution.class);
 
     private final CostType costType;
     private final StrategyType strategy;
@@ -88,6 +92,7 @@ public class AnalysisDistribution {
     }
 
     private void distribution() {
+        logger.info("Analyse distribution   : " + costType.toString() + ", " + strategy.toString());
         totalProb = 0;
         for (State state : statesProbatility.keySet()) {
             if (state.hasNext()) {
@@ -118,6 +123,7 @@ public class AnalysisDistribution {
 
     private void write(HashMap<Integer, Double> bySum, String distribution_sumConcat) {
         Csv csv = new Csv(getClass().getName(), distribution_sumConcat, costType, strategy);
+        logger.info("Writting file          : "  + csv.getOutPath());
         csv.add("Sum", "Probability");
         for (Integer i : bySum.keySet()) {
             double prob = bySum.get(i);
