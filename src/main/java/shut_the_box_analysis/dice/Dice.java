@@ -8,11 +8,9 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public final class Dice {
 
-    private final Random random;
     private final ContiguousSet<Integer> range;
 
     private Dice() {
-        this.random = new Random();
         this.range = ContiguousSet.create(
                 Range.closed(DiceConst.MIN.get(), DiceConst.MAX.get()),
                 DiscreteDomain.integers());
@@ -27,9 +25,7 @@ public final class Dice {
     }
 
     public static int roll() {
-        int d1 = rollOneDice();
-        int d2 = rollOneDice();
-        return d1 + d2;
+        return rollOneDice() + rollOneDice();
     }
 
     private static int rollOneDice() {

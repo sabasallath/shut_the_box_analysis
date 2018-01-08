@@ -1,8 +1,6 @@
 package shut_the_box_analysis.dag;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
+import com.google.common.collect.*;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -12,6 +10,7 @@ import shut_the_box_analysis.states.StateFactory;
 
 import java.util.BitSet;
 import java.util.LinkedList;
+import java.util.Set;
 import java.util.TreeSet;
 
 import static org.junit.Assert.assertEquals;
@@ -38,16 +37,33 @@ public class DecompositionTest {
         System.out.println(bs);
     }
 
-
-    @Ignore
     @Test
-    public void getValidtest() {
-        TreeSet<Integer> state = Sets.newTreeSet();
-        state.add(1);
-        State root = factory.state(Sets.newTreeSet(state), 3);
-        ImmutableList<State> valid = decomposition.getValid(root);
+    public void decompositionTest() {
+        ImmutableList<Set<Integer>> decomp3 = ImmutableList.of(
+                        Sets.newHashSet(1, 2),
+                        Sets.newHashSet(3));
+        assertEquals(decomp3, decomposition.get(3));
 
-        LinkedList<Integer> l = Lists.newLinkedList();
-        assertEquals(factory.state(Sets.newTreeSet(l)), valid);
+        ImmutableList<Set<Integer>> decomp6 = ImmutableList.of(
+                        Sets.newHashSet(1, 2, 3),
+                        Sets.newHashSet(2, 4),
+                        Sets.newHashSet(1, 5),
+                        Sets.newHashSet(6));
+        assertEquals(decomp6, decomposition.get(6));
+
+        ImmutableList<Set<Integer>> decomp12 = ImmutableList.of(
+                Sets.newHashSet(1, 2, 4, 5),
+                Sets.newHashSet(3, 4, 5),
+                Sets.newHashSet(1, 2, 3, 6),
+                Sets.newHashSet(2, 4, 6),
+                Sets.newHashSet(1, 5, 6),
+                Sets.newHashSet(2, 3, 7),
+                Sets.newHashSet(1, 4, 7),
+                Sets.newHashSet(5, 7),
+                Sets.newHashSet(1, 3, 8),
+                Sets.newHashSet(4, 8),
+                Sets.newHashSet(1, 2, 9),
+                Sets.newHashSet(3, 9));
+        assertEquals(decomp12, decomposition.get(12));
     }
 }

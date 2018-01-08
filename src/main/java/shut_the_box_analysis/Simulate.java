@@ -16,11 +16,6 @@ public class Simulate {
                 simulate(costType, strategy);
             }
         }
-//        simulate(CostType.WIN_LOOSE, StrategyType.MAX);
-//        simulate(CostType.WIN_LOOSE, StrategyType.MIN);
-//        simulate(CostType.WIN_LOOSE, StrategyType.RANDOM);
-//        simulate(CostType.SUM, StrategyType.MIN);
-//        simulate(CostType.WIN_LOOSE, StrategyType.MAX);
     }
 
     private static void simulate(CostType concat, StrategyType strategy) {
