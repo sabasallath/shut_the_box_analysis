@@ -56,7 +56,7 @@ public class AnalysisDistributionSimulate {
 
     private void write(HashMap<Integer, Integer> map, String filename) {
         Csv csv = new Csv(getClass().getName(), filename, costType, strategy);
-        csv.add("Sum", "Quantity");
+        csv.add("Score", "Quantity/Total Quantity");
 
         for (Integer i : map.keySet()) {
             Integer qty = map.get(i);

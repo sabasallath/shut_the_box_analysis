@@ -43,7 +43,7 @@ def plot(filename, width, height, label):
     data = pd.read_csv(input_file)
 
     plt.xticks(rotation=label)
-    sns.barplot(x='Sum', y='Quantity', data=data, ax=ax1).set_title('Probability by Sum Simulation')
+    sns.barplot(x='Score', y='Quantity/Total Quantity', data=data, ax=ax1).set_title('Distribution - simulation')
     plt.savefig(output_file)
     plt.close(fig)
 

@@ -124,7 +124,7 @@ public class AnalysisDistribution {
     private void write(HashMap<Integer, Double> bySum, String distribution_sumConcat) {
         Csv csv = new Csv(getClass().getName(), distribution_sumConcat, costType, strategy);
         logger.info("Writting file          : "  + csv.getOutPath());
-        csv.add("Sum", "Probability");
+        csv.add("Score", "Probability");
         for (Integer i : bySum.keySet()) {
             double prob = bySum.get(i);
             csv.add(i, prob);
