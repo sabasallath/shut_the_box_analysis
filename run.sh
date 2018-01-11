@@ -22,3 +22,4 @@ ploting/src/plot.py
 ploting/src/plotDistribution.py
 ploting/src/plotDistributionSimulate.py
 ploting/src/plotTwoPlayer.py
+ploting/src/plotTwoPlayerBoth.py
