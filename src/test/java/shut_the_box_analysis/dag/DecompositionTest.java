@@ -2,16 +2,12 @@ package shut_the_box_analysis.dag;
 
 import com.google.common.collect.*;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import shut_the_box_analysis.states.CostType;
-import shut_the_box_analysis.states.State;
 import shut_the_box_analysis.states.StateFactory;
 
 import java.util.BitSet;
-import java.util.LinkedList;
 import java.util.Set;
-import java.util.TreeSet;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;

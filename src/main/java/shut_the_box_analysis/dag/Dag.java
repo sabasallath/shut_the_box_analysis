@@ -23,7 +23,11 @@ public class Dag {
     private final State leaf;
 
     public Dag(CostType costType, StrategyType strategy) {
-        this.factory = new StateFactory(costType);
+        this(costType, strategy, -1);
+    }
+
+    public Dag(CostType costType, StrategyType strategy, Integer scoreToBeat) {
+        this.factory = new StateFactory(costType, scoreToBeat);
         this.strategy = strategy;
         this.root = factory.state(Sets.newTreeSet(Box.irange()));
         this.leaf = chooseLeaf(costType);

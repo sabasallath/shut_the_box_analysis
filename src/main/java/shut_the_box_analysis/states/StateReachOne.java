@@ -7,11 +7,11 @@ import java.util.TreeSet;
 public class StateReachOne extends State {
 
     StateReachOne(TreeSet<Integer> state, int dice) {
-        super(state, dice);
+        super(state, dice, -1);
     }
 
     StateReachOne(TreeSet<Integer> state) {
-        super(state);
+        super(state, -1);
     }
 
     @Override

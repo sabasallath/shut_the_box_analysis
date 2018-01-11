@@ -12,21 +12,23 @@ public abstract class State {
     private final List<State> next;
     private final List<State> previous;
     private final Integer score;
+    private final Integer valueToBeat;
     private double cost;
     final TreeSet<Integer> state;
     private State strategyNext;
-
-    State(TreeSet<Integer> state, int dice) {
+    
+    State(TreeSet<Integer> state, int dice, Integer valueToBeat) {
         this.state = state;
         this.dice = dice;
+        this.valueToBeat = valueToBeat;
         this.next = new LinkedList<>();
         this.previous = new LinkedList<>();
         this.score = setScore();
         this.cost = score;
     }
 
-    State(TreeSet<Integer> state) {
-        this(state, 0);
+    State(TreeSet<Integer> state, Integer valueToBeat) {
+        this(state, 0, valueToBeat);
     }
 
     abstract int setScore();
@@ -109,5 +111,9 @@ public abstract class State {
     @Override
     public String toString() {
         return state.toString() + "_" + dice();
+    }
+
+    public Integer getValueToBeat() {
+        return valueToBeat;
     }
 }

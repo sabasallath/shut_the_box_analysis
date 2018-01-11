@@ -5,11 +5,11 @@ import java.util.TreeSet;
 public class StateWinLoose extends State {
 
     StateWinLoose(TreeSet<Integer> state, int dice) {
-        super(state, dice);
+        super(state, dice, -1);
     }
 
     StateWinLoose(TreeSet<Integer> state) {
-        super(state);
+        super(state, -1);
     }
 
     @Override

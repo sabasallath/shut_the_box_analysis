@@ -5,11 +5,11 @@ import java.util.TreeSet;
 public class StateConcat extends State {
 
     StateConcat(TreeSet<Integer> state, int dice) {
-        super(state, dice);
+        super(state, dice, -1);
     }
 
     StateConcat(TreeSet<Integer> state) {
-        super(state);
+        super(state, -1);
     }
 
     @Override

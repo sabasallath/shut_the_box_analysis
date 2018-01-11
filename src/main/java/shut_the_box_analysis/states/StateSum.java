@@ -5,11 +5,11 @@ import java.util.TreeSet;
 public class StateSum extends State {
 
     StateSum(TreeSet<Integer> state, int dice) {
-        super(state, dice);
+        super(state, dice, -1);
     }
 
     StateSum(TreeSet<Integer> state) {
-        super(state);
+        super(state, -1);
     }
 
     @Override

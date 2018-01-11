@@ -4,7 +4,8 @@ public enum CostType {
     SUM("sum"),
     CONCAT("concat"),
     WIN_LOOSE("win_loose"),
-    REACH_ONE("reach_one");
+    REACH_ONE("reach_one"),
+    BEAT("beat");
 
     private final String s;
 
@@ -17,3 +18,4 @@ public enum CostType {
         return s;
     }
 }
+

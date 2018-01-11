@@ -21,10 +21,12 @@ public class AnalysisDistribution {
     private HashMap<State, Integer> visitedCounter;
     private HashMap<State, Double> statesProbatility;
     private double totalProb;
+    private boolean write;
 
-    public AnalysisDistribution(Dag dag) {
+    public AnalysisDistribution(Dag dag, boolean write) {
         this.costType = dag.getFactory().getType();
         this.strategy = dag.getStrategy();
+        this.write = write;
         this.statesByCost = Maps.newHashMap();
         this.statesProbatility = Maps.newHashMap();
         this.visitedCounter = Maps.newHashMap();
@@ -39,6 +41,10 @@ public class AnalysisDistribution {
         if (costType == CostType.CONCAT) {
             distributionSumConcat();
         }
+    }
+
+    public AnalysisDistribution(Dag dag) {
+        this(dag, true);
     }
 
     private void markVisitRoot(State root) {
@@ -92,7 +98,12 @@ public class AnalysisDistribution {
     }
 
     private void distribution() {
-        logger.info("Analyse distribution   : " + costType.toString() + ", " + strategy.toString());
+        if (costType == CostType.BEAT) {
+            logger.info("Analyse twoPlayer part : " + costType.toString() + ", " + strategy.toString());
+        } else {
+            logger.info("Analyse distribution   : " + costType.toString() + ", " + strategy.toString());
+        }
+
         totalProb = 0;
         for (State state : statesProbatility.keySet()) {
             if (state.hasNext()) {
@@ -121,15 +132,20 @@ public class AnalysisDistribution {
         write(bySum, "distribution_sumConcat");
     }
 
-    private void write(HashMap<Integer, Double> bySum, String distribution_sumConcat) {
-        Csv csv = new Csv(getClass().getName(), distribution_sumConcat, costType, strategy);
-        logger.info("Writting file          : "  + csv.getOutPath());
-        csv.add("Score", "Probability");
-        for (Integer i : bySum.keySet()) {
-            double prob = bySum.get(i);
-            csv.add(i, prob);
+    private void write(HashMap<Integer, Double> statesByCost, String distribution_sumConcat) {
+        if (write) {
+            Csv csv = new Csv(getClass().getName(), distribution_sumConcat, costType, strategy);
+            logger.info("Writting file          : " + csv.getOutPath());
+            csv.add("Score", "Probability");
+            for (Integer i : statesByCost.keySet()) {
+                double prob = statesByCost.get(i);
+                csv.add(i, prob);
+            }
+            csv.write();
         }
-        csv.write();
     }
 
+    public HashMap<Integer, Double> getDistribution() {
+        return statesByCost;
+    }
 }

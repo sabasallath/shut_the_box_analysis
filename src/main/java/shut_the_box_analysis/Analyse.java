@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import shut_the_box_analysis.analysis.AnalysisDistribution;
 import shut_the_box_analysis.analysis.AnalysisDistributionSimulate;
+import shut_the_box_analysis.analysis.AnalysisTwoPlayer;
 import shut_the_box_analysis.analysis.AnalysisWinningDepth;
 import shut_the_box_analysis.dag.StrategyType;
 import shut_the_box_analysis.states.CostType;
@@ -24,6 +25,10 @@ public class Analyse {
                 new AnalysisDistribution(dag);
                 new AnalysisDistributionSimulate(dag);
             }
+        }
+
+        for (StrategyType strategyType : StrategyType.values()) {
+            new AnalysisTwoPlayer(strategyType);
         }
     }
 }
